@@ -5,7 +5,8 @@ from projeto_palavras.settings import APP
 from projeto_palavras.db import (consultar_dados_user, 
                                  inserir_dados_user,
                                  consultar_dados_carteira_cripto,
-                                 inserir_dados_carteira_cripto)
+                                 inserir_dados_carteira_cripto,
+                                 _verificar_se_db_existe)
 from projeto_palavras.utils import decrypt
 from tabulate import tabulate
 
@@ -73,6 +74,33 @@ def criar_usuario():
     else:
         inicio()
 
+def login():
+    _verificar_se_db_existe()
+    cabecalho()
+
+    texto = 'LOGIN'
+    print(_centralizar_texto(texto, _largura_altura_terminal()['largura']))
+    print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
+    print('')
+
+    usuario = consultar_dados_user()
+    if usuario:
+        senha_app = input('++ Insira a senha de acesso: ')
+        senha_desencriptada = decrypt(consultar_dados_user()[0]['senha_app'], senha_app)
+        if senha_desencriptada is not None:
+            inicio()
+        else:
+            texto = 'SENHA DE ACESSO INCORRETA!'
+            print('')
+            print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
+            print(_centralizar_texto(texto, _largura_altura_terminal()['largura']))
+            print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
+            print('')
+            sleep(1.5)
+            login()
+    else:
+        criar_usuario()
+
 def inicio():
     cabecalho()
 
@@ -83,24 +111,21 @@ def inicio():
 
     lista_opcoes = ['1', '2', '3', '4']
 
-    usuario = consultar_dados_user()
-    if usuario:
-        loop = True
-        while loop:
-            opcao = input('Digite uma opção do menu Opções: ')
-            if opcao in lista_opcoes:
-                if opcao == '1':
-                    buscar_todas_seeds_words()
-                
-                elif opcao == '2':
-                    adicionar_seeds()
-                elif opcao == '3':
-                    buscar_seeds_words_por_id()
-                elif opcao == '4':
-                    loop = False
+    loop = True
+    while loop:
+        opcao = input('Digite uma opção do menu Opções: ')
+        if opcao in lista_opcoes:
+            if opcao == '1':
+                buscar_todas_seeds_words()
+            
+            elif opcao == '2':
+                adicionar_seeds()
+            elif opcao == '3':
+                buscar_seeds_words_por_id()
+            elif opcao == '4':
+                loop = False
 
-    else:
-        criar_usuario()
+
 
 def buscar_todas_seeds_words():
     cabecalho()
@@ -261,9 +286,13 @@ def adicionar_seeds():
                 print('')
                 print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
                 print('')
+                sleep(1.5)
+                inicio()
             except:
-                print(_centralizar_texto('ERRO AO ADICIONAR NOVAS SEEDS WORDS [feche o programa e abra novamente]!!!', _largura_altura_terminal()['largura']))
+                print(_centralizar_texto('ERRO AO ADICIONAR NOVAS SEEDS WORDS [tente novamente]!!!', _largura_altura_terminal()['largura']))
                 print('')
+                sleep(1.5)
+                adicionar_seeds()
             break
         elif opcao == 'i':
             inicio()

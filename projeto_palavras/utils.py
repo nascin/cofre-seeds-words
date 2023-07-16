@@ -32,5 +32,5 @@ def decrypt(encrypted_data: str, secret_key: str) -> str:
     try:
         return f.decrypt(encrypted_data_bytes[16:]).decode("utf-8")
     except InvalidToken:
-        print('Erro ao desencriptar dados: Chave Secreta Inválida!')
+        assert 'Erro ao desencriptar dados: Chave Secreta Inválida!'
         return None

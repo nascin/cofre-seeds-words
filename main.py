@@ -1,8 +1,8 @@
-from projeto_palavras.telas import inicio
+from projeto_palavras.telas import login
 
 
 def main():
-    inicio()
+    login()
 
 if __name__ == '__main__':
     main()

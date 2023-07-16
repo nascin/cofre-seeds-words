@@ -1,7 +1,12 @@
+import os
 import sqlite3
 from projeto_palavras.utils import data_atual, encrypt
 from projeto_palavras.settings import DB
 
+
+def _verificar_se_db_existe(camiho: str=DB['path_db']):
+    if not os.path.exists(camiho):
+        criar_db()
 
 def criar_db():
     # Conexão com o banco de dados
