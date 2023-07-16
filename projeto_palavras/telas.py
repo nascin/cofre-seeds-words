@@ -2,7 +2,10 @@ import shutil
 import os
 from time import sleep
 from projeto_palavras.settings import APP
-from projeto_palavras.db import consultar_dados_user, inserir_dados_user
+from projeto_palavras.db import (consultar_dados_user, 
+                                 inserir_dados_user,
+                                 consultar_dados_carteira_cripto)
+from tabulate import tabulate
 
 
 def _largura_altura_terminal():
@@ -22,7 +25,12 @@ def _limpar_terminal():
 
 def cabecalho():
     _limpar_terminal()
-    texto = f'>>>>>>>>>>>>>>>> {APP["nome"]} - {APP["versao"]} <<<<<<<<<<<<<<<<'
+
+    texto_cabecalho = f' {APP["nome"]} - {APP["versao"]} '
+    largura = _largura_altura_terminal()['largura'] - len(texto_cabecalho)
+    
+    form = '=' * int(largura // 2 - 1)
+    texto = f'{form} {texto_cabecalho} {form}'
     print(_centralizar_texto(texto, _largura_altura_terminal()['largura']))
     print('')
 
@@ -66,8 +74,27 @@ def inicio():
     _limpar_terminal()
     cabecalho()
 
-    print(_centralizar_texto('Digite a opção correspondente: ', _largura_altura_terminal()['largura']))
-    print('')
-    opcoes = f'''Ver seeds [1] | Adicionar seeds [2]'''
+    opcoes = f'''Opções >> Ver seeds [1] | Adicionar seeds [2]'''
     print(_centralizar_texto(opcoes, _largura_altura_terminal()['largura']))
+    print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
     print('')
+
+    lista_opcoes = ['1', '2']
+
+    while True:
+        dados_consulta = consultar_dados_carteira_cripto()
+        
+        opcao = input('Digite uma opção: ')
+        if opcao in lista_opcoes:
+            if opcao == '1':
+                if dados_consulta:
+                    lista_cabecalho = ['Id', 'Data de Criação', 'Nome Cripto', 'Nome Carteira', 'Seeds Words (criptografado)']
+                    lista_valores = [[valor for valor in dicionario.values()] for dicionario in dados_consulta]
+                    largura_coluna = int(_largura_altura_terminal()['largura'] / len(lista_cabecalho) * 1.5)
+                    tabela = tabulate(lista_valores, 
+                                    headers=lista_cabecalho, 
+                                    tablefmt="fancy_grid", 
+                                    maxcolwidths=largura_coluna)
+                    print(tabela)
+                else:
+                    print(_centralizar_texto('NÃO EXISTE SEEDS SALVA', _largura_altura_terminal()['largura']))
