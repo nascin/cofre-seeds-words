@@ -28,8 +28,7 @@ def criar_db():
             id INTEGER PRIMARY KEY,
             data_criacao DATE,
             nome VARCHAR(255),
-            senha_app VARCHAR(255),
-            chave_palavras VARCHAR(255)
+            senha_app VARCHAR(255)
         );''')
         print('++ tabela USER criada')
     except Exception as err:
@@ -62,7 +61,7 @@ def inserir_dados_carteira_cripto(nome_cripto: str, nome_carteira: str, palavras
     # Fechando a conexão com o banco de dados
     conn.close()
 
-def inserir_dados_user(nome: str, senha_app: str, chave_palavras: str, chave_secreta: str):
+def inserir_dados_user(nome: str, senha_app: str, chave_secreta: str):
     # Conectando ao banco de dados
     conn = sqlite3.connect(DB['path_db'])
     cursor = conn.cursor()
@@ -71,11 +70,10 @@ def inserir_dados_user(nome: str, senha_app: str, chave_palavras: str, chave_sec
     data_criacao = data_atual()
     nome = nome
     senha_app = encrypt(senha_app, chave_secreta)
-    chave_palavras = encrypt(chave_palavras, chave_secreta)
 
     # Executando a inserção de dados
-    cursor.execute("INSERT INTO user (data_criacao, nome, senha_app, chave_palavras) VALUES (?, ?, ?, ?)",
-                (data_criacao, nome, senha_app, chave_palavras))
+    cursor.execute("INSERT INTO user (data_criacao, nome, senha_app) VALUES (?, ?, ?)",
+                (data_criacao, nome, senha_app))
 
     # Salvando a transação
     conn.commit()
@@ -129,8 +127,7 @@ def consultar_dados_user():
                 "id": resultado[0],
                 "data_criacao": resultado[1],
                 "nome": resultado[2],
-                "senha_app": resultado[3],
-                "chave_palavras": resultado[4]
+                "senha_app": resultado[3]
             }
         )
 
