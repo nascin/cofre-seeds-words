@@ -118,13 +118,12 @@ def inicio():
         if opcao in lista_opcoes:
             if opcao == '1':
                 buscar_todas_seeds_words()
-            elif opcao == '2':
+            if opcao == '2':
                 adicionar_seeds()
-            elif opcao == '3':
+            if opcao == '3':
                 buscar_seeds_words_por_id()
-            elif opcao == '4':
+            if opcao == '4':
                 sys.exit()
-
 
 def buscar_todas_seeds_words():
     cabecalho()
