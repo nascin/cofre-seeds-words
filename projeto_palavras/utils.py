@@ -23,7 +23,6 @@ def encrypt(plain_text: str, secret_key: str) -> str:
         salt + f.encrypt(plain_text.encode("utf-8"))
     ).decode()
 
-
 def decrypt(encrypted_data: str, secret_key: str) -> str:
     encrypted_data_bytes = base64.urlsafe_b64decode(encrypted_data)
     salt = encrypted_data_bytes[:16]

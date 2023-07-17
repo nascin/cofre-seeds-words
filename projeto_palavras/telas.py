@@ -1,12 +1,14 @@
 import shutil
 import os
+import sys
 from time import sleep
 from projeto_palavras.settings import APP
 from projeto_palavras.db import (consultar_dados_user, 
                                  inserir_dados_user,
                                  consultar_dados_carteira_cripto,
                                  inserir_dados_carteira_cripto,
-                                 _verificar_se_db_existe)
+                                 _verificar_se_db_existe,
+                                 excluir_item_carteira_cripto)
 from projeto_palavras.utils import decrypt
 from tabulate import tabulate
 
@@ -111,20 +113,17 @@ def inicio():
 
     lista_opcoes = ['1', '2', '3', '4']
 
-    loop = True
-    while loop:
+    while True:
         opcao = input('Digite uma opção do menu Opções: ')
         if opcao in lista_opcoes:
             if opcao == '1':
                 buscar_todas_seeds_words()
-            
             elif opcao == '2':
                 adicionar_seeds()
             elif opcao == '3':
                 buscar_seeds_words_por_id()
             elif opcao == '4':
-                loop = False
-
+                sys.exit()
 
 
 def buscar_todas_seeds_words():
@@ -204,8 +203,8 @@ def buscar_seeds_words_por_id():
                 print('')
 
                 while True:
-                    opcao = input('++ Digite [d] para desencriptar seeds, [b] para nova busca ou [i] para voltar ao início: ')
-                    if opcao == 'd' or opcao == 'b' or opcao == 'i':
+                    opcao = input('++ Digite [d] para desencriptar, [b] nova busca, [e] excluir ou [i] para voltar ao início: ')
+                    if opcao == 'd' or opcao == 'b' or opcao == 'e' or opcao == 'i':
                         break
                 if opcao == 'd':
                     chave_secreta = input('++ Insira a chave secreta: ')
@@ -237,9 +236,36 @@ def buscar_seeds_words_por_id():
                         buscar_seeds_words_por_id()
                     elif nova_opcao == 'i':
                         inicio()
-
                 elif opcao == 'b':
                     buscar_seeds_words_por_id()
+                elif opcao == 'e':
+                    chave_secreta = input('++ Insira a chave secreta para DELETAR seeds words: ')
+                    seeds_desencriptada = decrypt(valor[4], chave_secreta)
+
+                    if seeds_desencriptada is not None:
+                        excluir_item_carteira_cripto(valor[0])
+
+                        texto = f'SEEDS WORDS [Cripto: {valor[2]} - Nome da Carteira {valor[3]}] DELETADA!'
+                        print('')
+                        print(_centralizar_texto(texto, _largura_altura_terminal()['largura']))
+                        print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
+                        print('')
+                        print(f'PALAVRAS SECRETAS: ({seeds_desencriptada})')
+                        print('')
+                        print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
+                        print('')
+                        sleep(5)
+                        inicio()
+                    else:
+                        texto = 'CHAVE SECRETA INVÁLIDA!'
+                        print('')
+                        print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
+                        print(_centralizar_texto(texto, _largura_altura_terminal()['largura']))
+                        print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
+                        print('')
+                        sleep(1.5)
+                        buscar_seeds_words_por_id()
+
                 elif opcao == 'i':
                     inicio()
 
