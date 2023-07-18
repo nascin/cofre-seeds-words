@@ -1,7 +1,7 @@
 import os
 import sqlite3
-from projeto_palavras.utils import data_atual, encrypt
-from projeto_palavras.settings import DB
+from cofre.utils import data_atual, encrypt
+from cofre.settings import DB
 
 
 def _verificar_se_db_existe(camiho: str=DB['path_db']):

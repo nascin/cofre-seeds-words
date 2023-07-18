@@ -2,14 +2,14 @@ import shutil
 import os
 import sys
 from time import sleep
-from projeto_palavras.settings import APP
-from projeto_palavras.db import (consultar_dados_user, 
+from cofre.settings import APP
+from cofre.db import (consultar_dados_user, 
                                  inserir_dados_user,
                                  consultar_dados_carteira_cripto,
                                  inserir_dados_carteira_cripto,
                                  _verificar_se_db_existe,
                                  excluir_item_carteira_cripto)
-from projeto_palavras.utils import decrypt
+from cofre.utils import decrypt
 from tabulate import tabulate
 
 

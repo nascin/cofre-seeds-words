@@ -1,4 +1,4 @@
-from projeto_palavras.telas import login
+from cofre.telas import login
 
 
 def main():
