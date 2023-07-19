@@ -4,13 +4,13 @@ from cofre.utils import data_atual, encrypt
 from cofre.settings import DB
 
 
-def _verificar_se_db_existe(camiho: str=DB['path_db']):
-    if not os.path.exists(camiho):
-        criar_db()
+def _verificar_se_db_existe(camiho_db: str=DB['path_db']):
+    if not os.path.exists(camiho_db):
+        criar_db(camiho_db)
 
-def criar_db():
+def criar_db(caminho_db: str):
     # Conexão com o banco de dados
-    conn = sqlite3.connect(DB['path_db'])
+    conn = sqlite3.connect(caminho_db)
 
     # Criar tabela carteira_cripto
     try:
@@ -44,10 +44,10 @@ def criar_db():
         # Fechando a conexão com o banco de dados
         conn.close()
 
-def inserir_dados_carteira_cripto(nome_cripto: str, nome_carteira: str, palavras: str, chave_secreta: str):
+def inserir_dados_carteira_cripto(caminho_db: str, nome_cripto: str, nome_carteira: str, palavras: str, chave_secreta: str):
     try:
         # Conectando ao banco de dados
-        conn = sqlite3.connect(DB['path_db'])
+        conn = sqlite3.connect(caminho_db)
         cursor = conn.cursor()
 
         # Dados a serem inseridos
@@ -68,10 +68,10 @@ def inserir_dados_carteira_cripto(nome_cripto: str, nome_carteira: str, palavras
         # Fechando a conexão com o banco de dados
         conn.close()
 
-def inserir_dados_user(nome: str, senha_app: str, chave_secreta: str):
+def inserir_dados_user(caminho_db: str, nome: str, senha_app: str, chave_secreta: str):
     try:
         # Conectando ao banco de dados
-        conn = sqlite3.connect(DB['path_db'])
+        conn = sqlite3.connect(caminho_db)
         cursor = conn.cursor()
 
         # Dados a serem inseridos
@@ -91,10 +91,10 @@ def inserir_dados_user(nome: str, senha_app: str, chave_secreta: str):
         # Fechando a conexão com o banco de dados
         conn.close()
 
-def consultar_dados_carteira_cripto():
+def consultar_dados_carteira_cripto(caminho_db: str):
     try:
         # Conectando ao banco de dados
-        conn = sqlite3.connect(DB['path_db'])
+        conn = sqlite3.connect(caminho_db)
         cursor = conn.cursor()
 
         # Executando a consulta de dados
@@ -121,10 +121,10 @@ def consultar_dados_carteira_cripto():
         # Fechando a conexão com o banco de dados
         conn.close()
 
-def consultar_dados_user():
+def consultar_dados_user(caminho_db: str):
     try:
         # Conectando ao banco de dados
-        conn = sqlite3.connect(DB['path_db'])
+        conn = sqlite3.connect(caminho_db)
         cursor = conn.cursor()
 
         # Executando a consulta de dados
@@ -150,10 +150,10 @@ def consultar_dados_user():
         # Fechando a conexão com o banco de dados
         conn.close()
 
-def excluir_item_carteira_cripto(id: str):
+def excluir_item_carteira_cripto(caminho_db: str, id: str):
     try:
         # Conectando ao banco de dados
-        conn = sqlite3.connect(DB['path_db'])
+        conn = sqlite3.connect(caminho_db)
         cursor = conn.cursor()
 
         # Excluindo o item da tabela

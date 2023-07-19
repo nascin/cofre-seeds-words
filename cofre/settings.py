@@ -2,7 +2,7 @@ import os
 
 APP = {
     'nome': 'COFRE SEEDS WORDS',
-    'versao': 'v1.0.1'
+    'versao': 'v1.1.0'
 }
 
 DB = {

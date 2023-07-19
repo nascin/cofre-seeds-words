@@ -33,3 +33,8 @@ def decrypt(encrypted_data: str, secret_key: str) -> str:
     except InvalidToken:
         assert 'Erro ao desencriptar dados: Chave Secreta Inválida!'
         return None
+
+def excluir_arquivo(caminho: str):
+    '''Excluir arquivo'''
+    if os.path.exists(caminho):
+        os.remove(caminho)
