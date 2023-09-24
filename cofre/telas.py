@@ -2,7 +2,7 @@ import shutil
 import os
 import sys
 from time import sleep
-from cofre.settings import APP, DB
+from cofre.settings import app, db
 from cofre.db import (consultar_dados_user, 
                                  inserir_dados_user,
                                  consultar_dados_carteira_cripto,
@@ -31,7 +31,7 @@ def _limpar_terminal():
 def cabecalho():
     _limpar_terminal()
 
-    texto_cabecalho = f' {APP["nome"]} - {APP["versao"]} '
+    texto_cabecalho = f' {app.nome} - {app.versao} '
     largura = _largura_altura_terminal()['largura'] - len(texto_cabecalho)
     
     form = '=' * int(largura // 2 - 1)
@@ -40,7 +40,7 @@ def cabecalho():
     print('')
 
 def criar_usuario():
-    usuario = consultar_dados_user(DB['path_db'])
+    usuario = consultar_dados_user(db.path_db)
     if not usuario:
         while True:
             cabecalho()
@@ -59,7 +59,7 @@ def criar_usuario():
                     break
             if opcao == 's':
                 try:
-                    inserir_dados_user(caminho_db=DB['path_db'],
+                    inserir_dados_user(caminho_db=db.path_db,
                                        nome=nome, 
                                        senha_app=senha_app,
                                        chave_secreta=senha_app)
@@ -86,10 +86,10 @@ def login():
     print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
     print('')
 
-    usuario = consultar_dados_user(DB['path_db'])
+    usuario = consultar_dados_user(db.path_db)
     if usuario:
         senha_app = input('++ Insira a senha de acesso: ')
-        senha_desencriptada = decrypt(consultar_dados_user(DB['path_db'])[0]['senha_app'], senha_app)
+        senha_desencriptada = decrypt(consultar_dados_user(db.path_db)[0]['senha_app'], senha_app)
         if senha_desencriptada is not None:
             inicio()
         else:
@@ -124,7 +124,7 @@ def inicio():
             if opcao == '3':
                 buscar_seeds_words_por_id()
             if opcao == '4':
-                sys.exit()
+                sys.exit(0)
 
 def buscar_todas_seeds_words():
     cabecalho()
@@ -133,7 +133,7 @@ def buscar_todas_seeds_words():
     print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
     print('')
 
-    dados_consulta = consultar_dados_carteira_cripto(DB['path_db'])
+    dados_consulta = consultar_dados_carteira_cripto(db.path_db)
 
     if dados_consulta:
         lista_cabecalho = ['Id', 'Data de Criação', 'Nome Cripto', 'Nome Carteira', 'Seeds Words (criptografado)']
@@ -165,7 +165,7 @@ def buscar_seeds_words_por_id():
     print(_centralizar_texto('-'*_largura_altura_terminal()['largura'], _largura_altura_terminal()['largura']))
     print('')
 
-    dados_consulta = consultar_dados_carteira_cripto(DB['path_db'])
+    dados_consulta = consultar_dados_carteira_cripto(db.path_db)
     lista_valores = [[valor for valor in dicionario.values()] for dicionario in dados_consulta]
 
     while True:
@@ -243,7 +243,7 @@ def buscar_seeds_words_por_id():
                     seeds_desencriptada = decrypt(valor[4], chave_secreta)
 
                     if seeds_desencriptada is not None:
-                        excluir_item_carteira_cripto(caminho_db=DB['path_db'],id=valor[0])
+                        excluir_item_carteira_cripto(caminho_db=db.path_db,id=valor[0])
 
                         texto = f'SEEDS WORDS [Cripto: {valor[2]} - Nome da Carteira {valor[3]}] DELETADA!'
                         print('')
@@ -299,7 +299,7 @@ def adicionar_seeds():
                 break
         if opcao == 's':
             try:
-                inserir_dados_carteira_cripto(caminho_db=DB['path_db'],
+                inserir_dados_carteira_cripto(caminho_db=db.path_db,
                                               nome_cripto=nome_cripto, 
                                               nome_carteira=nome_carteira, 
                                               palavras=palavras,

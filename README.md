@@ -15,4 +15,4 @@ Após iniciar o aplicativo, você será recebido com uma interface de linha de c
 - Baixe ou clone este repositório para o seu ambiente local.
 - Navegue até o diretório do projeto e crie um ambiente virtual: `python3 -m venv env`
 - Ative com `env/Scripts/activate`, e depois instale a dependências com `pip install -r requirements.txt`
-- Por fim, digite o terminal o seguinte comando: `pyinstaller --exclude-module tests -n Cofre --onefile main.py`
+- Por fim, digite o terminal o seguinte comando: `pyinstaller --exclude-module tests -n Cofre_Palavras_Chave --onefile main.py`

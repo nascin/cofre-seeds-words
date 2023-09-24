@@ -1,10 +1,10 @@
 import os
 import sqlite3
 from cofre.utils import data_atual, encrypt
-from cofre.settings import DB
+from cofre.settings import db
 
 
-def _verificar_se_db_existe(camiho_db: str=DB['path_db']):
+def _verificar_se_db_existe(camiho_db: str=db.path_db):
     if not os.path.exists(camiho_db):
         criar_db(camiho_db)
 
